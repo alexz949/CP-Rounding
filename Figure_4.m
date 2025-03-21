@@ -1,6 +1,11 @@
 clc
 clear all
 
+addpath("./algorithms/");
+addpath("./wrappers/")
+addpath("./tensor_toolbox/")
+
+
 als_data = struct;
 n = 8 %dimension of tensor
 em = 'lowmem'  %error method options:  'fast', 'full' and 'lowmem' ('fast' method provides an estimate rather than an exact error, sacrificing precision for speed.)
