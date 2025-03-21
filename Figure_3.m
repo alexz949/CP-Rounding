@@ -2,55 +2,14 @@ clc
 clear all
 maxNumCompThreads(1);
 
+addpath("./algorithms/");
+addpath("./wrappers/")
+addpath("./tensor_toolbox/")
 
 %% initialize 
 als_time = struct;
 exp_qr_time = struct;
 pw_qr_time = struct;
-
-%% 3 Way
-d = 3;
-r = 3;
-n = [10000,15000,30000];
-maxiter = 20;
-tol = 1e-10;
-
-
-als_time.r3 = zeros(length(n),5);
-exp_qr_time.r3 = zeros(length(n),7);
-pw_qr_time.r3 = zeros(length(n),7);
-
-for i = 1:length(n)
-    nk = n(i);
-    T = sinsum_full(d,nk);
-
-    % ranodmly initialize the core tensor
-    Uinit = cell(d,1);
-    for j = 1:d
-        Uinit{j} = rand(nk,r);
-    end
-    
-    % Perform CP roudning
-    [Mals3,~,outals3]  = cp_als_time(T,r,'init',Uinit,'maxiters',maxiter,'tol',tol,'printitn',1,'errmethod','fast');
-    [Mqr3,~,outqr3]    = cp_als_qr(T,r,'init',Uinit,'maxiters',maxiter,'tol',tol,'printitn',1,'errmethod','fast');
-    [Mqr_pw3,~,outpw3] = cp_als_qr_new(T,r,'init',Uinit,'maxiters',maxiter,'tol',tol,'printitn',1,'errmethod','fast');
-
-     % compute average iteration time
-    exp_qr_time.r3(i,:) = mean(outqr3.times(2:end,:),1);
-    pw_qr_time.r3(i,:)  = mean(outpw3.times(2:end,:),1);
-    als_time.r3(i,:)    = mean(outals3.times(2:end,:),1);
-end
-
-%%% data prep
-nals3 = zeros(3,6);
-nqr3 = zeros(3,6);
-npw3 = zeros(3,6);
-for i = 1:3
-    nals3(i,:) = [als_time.r3(i,1), als_time.r3(i,2),0,0,als_time.r3(i,3),als_time.r3(i,4)+als_time.r3(i,5)];
-    nqr3(i,:)  = [exp_qr_time.r3(i,1),exp_qr_time.r3(i,2),exp_qr_time.r3(i,3),exp_qr_time.r3(i,4),exp_qr_time.r3(i,5),(exp_qr_time.r3(i,6)+exp_qr_time.r3(i,7))];
-    npw3(i,:)  = [pw_qr_time.r3(i,1),pw_qr_time.r3(i,2),pw_qr_time.r3(i,3),pw_qr_time.r3(i,4),pw_qr_time.r3(i,5),(pw_qr_time.r3(i,6)+pw_qr_time.r3(i,7))];
-end
-
 
 %% 5 way
 d = 5;
@@ -95,6 +54,49 @@ for i = 1:3
     nals5(i,:) = [als_time.r5(i,1), als_time.r5(i,2),0,0,als_time.r5(i,3),(als_time.r5(i,4)+als_time.r5(i,5))];
     nqr5(i,:) = [exp_qr_time.r5(i,1),exp_qr_time.r5(i,2),exp_qr_time.r5(i,3),exp_qr_time.r5(i,4),exp_qr_time.r5(i,5),(exp_qr_time.r5(i,6)+exp_qr_time.r5(i,7))];
     npw5(i,:) = [pw_qr_time.r5(i,1),pw_qr_time.r5(i,2),pw_qr_time.r5(i,3),pw_qr_time.r5(i,4),pw_qr_time.r5(i,5),(pw_qr_time.r5(i,6)+pw_qr_time.r5(i,7))];
+end
+
+%% 3 Way
+d = 3;
+r = 3;
+n = [10000,15000,30000];
+maxiter = 20;
+tol = 1e-10;
+
+
+als_time.r3 = zeros(length(n),5);
+exp_qr_time.r3 = zeros(length(n),7);
+pw_qr_time.r3 = zeros(length(n),7);
+
+for i = 1:length(n)
+    nk = n(i);
+    T = sinsum_full(d,nk);
+
+    % ranodmly initialize the core tensor
+    Uinit = cell(d,1);
+    for j = 1:d
+        Uinit{j} = rand(nk,r);
+    end
+    
+    % Perform CP roudning
+    [Mals3,~,outals3]  = cp_als_time(T,r,'init',Uinit,'maxiters',maxiter,'tol',tol,'printitn',1,'errmethod','fast');
+    [Mqr3,~,outqr3]    = cp_als_qr(T,r,'init',Uinit,'maxiters',maxiter,'tol',tol,'printitn',1,'errmethod','fast');
+    [Mqr_pw3,~,outpw3] = cp_als_qr_new(T,r,'init',Uinit,'maxiters',maxiter,'tol',tol,'printitn',1,'errmethod','fast');
+
+     % compute average iteration time
+    exp_qr_time.r3(i,:) = mean(outqr3.times(2:end,:),1);
+    pw_qr_time.r3(i,:)  = mean(outpw3.times(2:end,:),1);
+    als_time.r3(i,:)    = mean(outals3.times(2:end,:),1);
+end
+
+%%% data prep
+nals3 = zeros(3,6);
+nqr3 = zeros(3,6);
+npw3 = zeros(3,6);
+for i = 1:3
+    nals3(i,:) = [als_time.r3(i,1), als_time.r3(i,2),0,0,als_time.r3(i,3),als_time.r3(i,4)+als_time.r3(i,5)];
+    nqr3(i,:)  = [exp_qr_time.r3(i,1),exp_qr_time.r3(i,2),exp_qr_time.r3(i,3),exp_qr_time.r3(i,4),exp_qr_time.r3(i,5),(exp_qr_time.r3(i,6)+exp_qr_time.r3(i,7))];
+    npw3(i,:)  = [pw_qr_time.r3(i,1),pw_qr_time.r3(i,2),pw_qr_time.r3(i,3),pw_qr_time.r3(i,4),pw_qr_time.r3(i,5),(pw_qr_time.r3(i,6)+pw_qr_time.r3(i,7))];
 end
 
 
@@ -223,11 +225,14 @@ bar(kt_data.sdata9(:,1:end-1),'stacked')
 title('9-way')
 a = gca;
 xlabel('n')
-ylabel('Time (secs)')
+ylabel('Time (secs)','FontSize',14)
 xticks([0:12])
 xticklabels({'','QR Imp','NE','','','QR Imp','NE','','','QR Imp','NE',''})
 a.XRuler.TickLabelGapOffset = 15;   
 a.YRuler.TickLabelGapOffset = 15;
+a.XAxis.FontSize = 12;
+a.XTickLabelRotation = 90;
+
 v = -0.06;
 text(1,v,'10000','fontsize',12)
 text(5,v,'15000','fontsize',12)
@@ -240,12 +245,15 @@ bar(kt_data.sdata7(:,1:end-1),'stacked')
 title('7-way')
 a = gca;
 xlabel('n')
-ylabel('Time (secs)')
+ylabel('Time (secs)','FontSize',14)
 xticks([0:12])
 xticklabels({'','QR Imp','NE','QR Exp','','QR Imp','NE','QR Exp','','QR Imp','NE','QR Exp'})
 a.XRuler.TickLabelGapOffset = 15;   
 a.YRuler.TickLabelGapOffset = 15;
-v = -0.03;
+a.XTickLabelRotation = 90;
+a.XAxis.FontSize = 12;
+ylim([0 0.42])
+v = -0.02;
 text(1,v,'10000','fontsize',12)
 text(5,v,'15000','fontsize',12)
 text(9,v,'30000','fontsize',12)
@@ -257,18 +265,20 @@ bar(kt_data.sdata3(:,1:end-1),'stacked')
 title('3-way')
 a = gca;
 xlabel('n')
-ylabel('Time (secs)')
+ylabel('Time (secs)','FontSize',14)
 xticks([0:12])
-ylim([0 0.010])
+ylim([0 0.0085])
 xticklabels({'','QR Imp','NE','QR Exp','','QR Imp','NE','QR Exp','','QR Imp','NE','QR Exp'})
 a.XRuler.TickLabelGapOffset = 15;   
 a.YRuler.TickLabelGapOffset = 15;
+a.XTickLabelRotation = 90;
+a.XAxis.FontSize = 12;
 v = -0.0005;
-text(1,v,'10000','fontsize',12)
-text(5,v,'15000','fontsize',12)
-text(9,v,'30000','fontsize',12)
-l = legend('MTTKRP/TTM','Gram/QR','Pairwise QR','Apply Pairwise QR','Back solve/NE solve');
-l.FontSize = 5;
+text(1,v,'10000','Fontsize',12)
+text(5,v,'15000','Fontsize',12)
+text(9,v,'30000','Fontsize',12)
+l = legend('MTTKRP/TTM','Gram/QR','Pairwise QR','Apply Pairwise QR','Back solve/NE solve','Other');
+l.FontSize = 5.8;
 l.Location = 'northwest';
 
 
@@ -278,12 +288,14 @@ bar(kt_data.sdata5(:,1:end-1),'stacked')
 title('5-way')
 a = gca;
 xlabel('n')
-ylabel('Time (secs)')
+ylabel('Time (secs)','FontSize',14)
 %ylim([0 430])
 xticks([0:12])
 xticklabels({'','QR Imp','NE','QR Exp','','QR Imp','NE','QR Exp','','QR Imp','NE','QR Exp'})
 a.XRuler.TickLabelGapOffset = 15;   
 a.YRuler.TickLabelGapOffset = 15;
+a.XTickLabelRotation = 90;
+a.XAxis.FontSize = 12;
 v = -0.002;
 text(1,v,'10000','fontsize',12)
 text(5,v,'15000','fontsize',12)
@@ -293,7 +305,6 @@ screenposition = get(gcf,'Position');
 set(gcf,...
     'PaperPosition',[0 0 screenposition(3:4)],...
     'PaperSize',[screenposition(3:4)]);
-
 saveas(gcf,'Fig_3.pdf')
 
 

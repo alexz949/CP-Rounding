@@ -9,7 +9,7 @@ addpath("./tensor_toolbox/")
 n = 2000;
 per_data = struct;
 per_data.res = zeros(24,5);
-runs = 100;
+runs = 50;
 
 for it = 1:runs
     tp = 1;
@@ -80,15 +80,16 @@ for it = 1:runs
       
         part = [t_apply_factor_QR,t_factor_QR,t_apply_QR_R,t_QR_R,t_back_solve];
         
-        per_data.res(tp,:) = per_data.res(tp,:) + part;
-        per_data.res(tp+1,:) = per_data.res(tp+1,:) + nort;
-        per_data.res(tp+2,:) = per_data.res(tp+2,:) + expt;
-        
+        if it > 1
+            per_data.res(tp,:) = per_data.res(tp,:) + part;
+            per_data.res(tp+1,:) = per_data.res(tp+1,:) + nort;
+            per_data.res(tp+2,:) = per_data.res(tp+2,:) + expt;
+        end
         tp = tp + 4;
     end
 end
 
-per_data.res = per_data.res /runs;
+per_data.res = per_data.res /(runs-1);
 sum_mat = zeros(1,24);
 for i = 1:24
     sum_mat(i) = sum(per_data.res(i,:));
@@ -120,6 +121,9 @@ l.Location = 'northwest';
 set(gca,'fontsize',16);
 set(gcf,'Units','inches');
 screenposition = get(gcf,'Position');
+set(gcf,...
+    'PaperPosition',[0 0 screenposition(3:4)],...
+    'PaperSize',[screenposition(3:4)]);
 saveas(gcf,'Fig_1.pdf')
 %%
 %%% Figure 2
@@ -152,7 +156,8 @@ xticks(0:18);
 xticklabels({'','QR Imp','NE','','QR Imp','NE','','QR Imp','NE','','QR Imp','NE','','QR Imp','NE','','QR Imp','NE'});
 a.XRuler.TickLabelGapOffset = 15;   
 a.YRuler.TickLabelGapOffset = 15;
-v = -0.0009;
+a.XTickLabelRotation = 90;
+v = -0.00009;
 text(1,v,'d=3','fontsize',12)
 text(4,v,'d=4','fontsize',12)
 text(7,v,'d=5','fontsize',12)
