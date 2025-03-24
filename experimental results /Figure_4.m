@@ -1,10 +1,9 @@
 clc
 clear all
 
-addpath("./algorithms/");
-addpath("./wrappers/")
-addpath("./tensor_toolbox/")
-
+addpath("../algorithms/");
+addpath("../wrappers/")
+addpath("../tensor_toolbox/")
 
 als_data = struct;
 n = 8 %dimension of tensor
@@ -106,4 +105,4 @@ screenposition = get(gcf,'Position');
 set(gcf,...
     'PaperPosition',[0 0 screenposition(3:4)],...
     'PaperSize',[screenposition(3:4)]);
-saveas(gcf,'Fig_4.pdf')
+% saveas(gcf,'Fig_4.pdf')

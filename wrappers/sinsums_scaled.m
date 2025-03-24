@@ -1,4 +1,4 @@
-function [T,diff] = sinsums(d,n,scale)
+function [T,diff] = sinsums_scaled(d,n,scale)
 % create rank d ktensor representation of sin of sums tensor with d modes
 % d: number of modes of the tensor, end rank
 % n: dimension of tensor
@@ -11,8 +11,9 @@ end
 lambda = ones(d,1);
 
 x = linspace(0,2*pi,n)';
-a = linspace(0,pi/d*(d-1)/scale,d);
+a = 0:scale:(0+(d-1)*scale);
 diff = a(2) - a(1);
+
 
 offs = cell(d,d);
 

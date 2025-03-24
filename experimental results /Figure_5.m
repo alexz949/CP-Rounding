@@ -4,11 +4,10 @@ clear all
 warning("off", "all")
 maxNumCompThreads(1);
 
-addpath("./algorithms/");
-addpath("./wrappers/")
-addpath("./tensor_toolbox/")
+addpath("../algorithms/");
+addpath("../wrappers/")
+addpath("../tensor_toolbox/")
 
- 
 d = 3 %number of modes
 n = 10000
 r = 50  % rank
@@ -205,7 +204,7 @@ l = legend('MTTKRP/TTM','Gram/QR','Pairwise QR','Apply Pairwise QR','Back solve/
 l.FontSize = 18;
 l.Location = 'northeast';
 set(gca,'fontsize',25)
-saveas(gcf,'Fig_5.pdf')
+% saveas(gcf,'Fig_5.pdf')
 
 
 

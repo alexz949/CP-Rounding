@@ -2,9 +2,9 @@ clc
 clear all
 maxNumCompThreads(1);
 
-addpath("./algorithms/");
-addpath("./wrappers/")
-addpath("./tensor_toolbox/")
+addpath("../algorithms/");
+addpath("../wrappers/")
+addpath("../tensor_toolbox/")
 
 %% initialize 
 als_time = struct;
@@ -305,7 +305,7 @@ screenposition = get(gcf,'Position');
 set(gcf,...
     'PaperPosition',[0 0 screenposition(3:4)],...
     'PaperSize',[screenposition(3:4)]);
-saveas(gcf,'Fig_3.pdf')
+% saveas(gcf,'Fig_3.pdf')
 
 
 

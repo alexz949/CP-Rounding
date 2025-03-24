@@ -1,24 +1,21 @@
 clc
 clear all
 
-addpath("./algorithms/");
-addpath("./wrappers/")
-addpath("./tensor_toolbox/")
+addpath("../algorithms/");
+addpath("../wrappers/")
+addpath("../tensor_toolbox/")
 
 dt = [3,3,5,3,5,3,5];
 n = 50;
-scale = [1,10,6,100,60,10000,600];
-% diff = [1, 0.1, 0.1, 0.01, 0.01, 0.0001,0.001];
+diff = [1, 0.1, 0.1, 0.01, 0.01, 0.0001,0.001];
 cond_d = zeros(7,1);
 NE_err = zeros(7,1);
 Exp_err = zeros(7,1);
 Imp_err = zeros(7,1);
 
-diff = [];
-
 for idx_d = 1:7
     d = dt(idx_d)
-    [T,diff(idx_d)] = sinsums_scaled(d,n,scale(idx_d));
+    T = sinsums_scaled(d,n,diff(idx_d));
     X = sinsum_full(d,n);
     for i = 1:d
         T.U{i} = (T.U{i});

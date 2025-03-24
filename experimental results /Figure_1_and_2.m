@@ -2,14 +2,14 @@ clc
 clear all
 maxNumCompThreads(1);
 
-addpath("./algorithms/");
-addpath("./wrappers/")
-addpath("./tensor_toolbox/")
+addpath("../algorithms/");
+addpath("../wrappers/")
+addpath("../tensor_toolbox/")
 
 n = 2000;
 per_data = struct;
 per_data.res = zeros(24,5);
-runs = 50;
+runs = 20;
 
 for it = 1:runs
     tp = 1;
@@ -124,7 +124,7 @@ screenposition = get(gcf,'Position');
 set(gcf,...
     'PaperPosition',[0 0 screenposition(3:4)],...
     'PaperSize',[screenposition(3:4)]);
-saveas(gcf,'Fig_1.pdf')
+% saveas(gcf,'Fig_1.pdf')
 %%
 %%% Figure 2
 bd_mat = zeros(18,5);
@@ -174,4 +174,4 @@ screenposition = get(gcf,'Position');
 set(gcf,...
     'PaperPosition',[0 0 screenposition(3:4)],...
     'PaperSize',[screenposition(3:4)]);
-saveas(gcf,'Fig_2.pdf')
+% saveas(gcf,'Fig_2.pdf')
